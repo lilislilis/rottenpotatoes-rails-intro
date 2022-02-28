@@ -7,19 +7,78 @@ class MoviesController < ApplicationController
   end
 
   def index
-    @sort = params[:sort] 
-    @movies = Movie.all.order(@sort)
-    @all_ratings = Movie.ratings
+    # @sort = params[:sort] 
+    # @movies = Movie.all.order(@sort)
+    # @rating_checks = @ratings
+    # @all_ratings = Movie.ratings
+    # @sort = params[:sort]||session[:sort]
+    # # #session[:ratings] = session[:ratings]||{'G'=>'','PG'=>'','PG-13'=>'','R'=>''}
+    # # @t_param = params[:ratings]||session[:ratings]
+    # # session[:sort] = @sort
+    # # session[:ratings] = @t_param
+    # # @movies = Movie.where(rating: session[:ratings].keys).order(session[:sort])
+    # # # if (params[:sort].nil? and !(session[:sort].nil?) or (params[:ratings].nil?))
+    # # #   flash.keep
+    # # end
+    # if params.key?(:sort)
+    #   session[:sort] = params[:sort]
+    # end
+    # if session[:sort] == 'title'
+    #   @movies = @movies.order(:title)
+    # elsif session[:sort] == 'release_date'
+    #   @movies = @movies.order(:release_date)
+    # end
+    
+    # if params.key?(:ratings)
+    #   session[:ratings] = params[:ratings].keys
+    # end
+    # if session.key?(:ratings)
+    #   @rating_checks = session[:ratings]
+    #   puts @rating_checks
+    #   @movies = @movies.where(rating: @ratings_checks)
+    #   puts @movies
+    # end
+    @movies = Movie.all
+    @all_ratings = Movie.obtain_ratings
+
+
+    # if params.key?(:sort_by)
+    #   session[:sort_by] = params[:sort_by]
+    # end
+
+    # if session[:sort_by] == 'title'
+    #   @movies = @movies.order(:title)
+    # elsif session[:sort_by] == 'release_date'
+    #   @movies = @movies.order(:release_date)
+    # end
+      
     @sort = params[:sort]||session[:sort]
-    session[:ratings] = session[:ratings]||{'G'=>'','PG'=>'','PG-13'=>'','R'=>''}
-    @t_param = params[:ratings]||session[:ratings]
-    session[:sort] = @sort
-    session[:ratings] = @t_param
-    @movies = Movie.where(rating: session[:ratings].keys).order(session[:sort])
-    if (params[:sort].nil? and !(session[:sort].nil?) or (params[:ratings].nil?))
-      flash.keep
-     
+    
+    if params.key?(:sort)
+      session[:sort] = params[:sort]
     end
+    if session[:sort] == 'title'
+      @movies = @movies.order(:title)
+    elsif session[:sort] == 'release_date'
+      @movies = @movies.order(:release_date)
+    end
+    # #session[:ratings] = session[:ratings]||{'G'=>'','PG'=>'','PG-13'=>'','R'=>''}
+    # @t_param = params[:ratings]||session[:ratings]
+    # session[:sort] = @sort
+    # session[:ratings] = @t_param
+    # @movies = Movie.where(rating: session[:ratings].keys).order(session[:sort])
+    # # if (params[:sort].nil? and !(session[:sort].nil?) or (params[:ratings].nil?))
+    # #   flash.keep
+    # end
+
+    if params.key?(:ratings)
+      session[:ratings] = params[:ratings].keys
+    end
+    if session.key?(:ratings)
+      @ratings_checks = session[:ratings]
+      @movies = @movies.where(rating: @ratings_checks)
+    end
+    
   end
 
   def new
